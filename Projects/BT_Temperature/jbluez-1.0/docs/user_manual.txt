@@ -1,0 +1,152 @@
+JBlueZ - Bluetooth Java Interface for Linux Using BlueZ
+=======================================================
+
+User/Developer Guide
+--------------------
+
+Introduction
+------------
+JBlueZ is a Java package which interfaces with the BlueZ Bluetooth protocol 
+stack for Linux, providing a simple means in which to add Bluetooth 
+functionality to Java applications.
+
+This document describes how to get started with JBlueZ, from a user/developer 
+perspective.
+
+Requirements
+------------
+Before attempting to use the API, run the example applications or compile any of 
+the sources, the BlueZ protocol stack must first be installed and tested on the 
+host system. Full details on how to do this can be found on the official BlueZ 
+homepage at http://bluez.sourceforge.net. Ensure that (at least) the BlueZ 
+kernel, libraries and utilities are installed.
+
+In order to run the example applications, a Java run-time environment is 
+required. If you wish to develop your own applications using the API you will 
+also require a Java SDK. During development, J2SE v1.4.0_01 was used. If you 
+wish to recompile JBlueZ, you will also need a C compiler. During development  
+the GNU C compiler (gcc) v2.95.3 was used.
+
+Getting Started
+---------------
+Once BlueZ is successfully installed, you need to configure a couple of 
+environment variables before being able to use Java API provided by JBlueZ.
+
+Firstly, the Java Archive (JAR) 'jbluez.jar', which is located in the bin 
+directory of this distribution, needs to be present in your classpath. This can 
+be achieved by placing it in a directory which Java already has in its 
+classpath, but this is not advised. A better solution is to include the location 
+of 'jbluez.jar' in your CLASSPATH environment variable. For example, if you have 
+unpacked this distribution into the /home/user/jbluez directory, then you need 
+to add /home/user/jbluez/bin/jbluez.jar to your CLASSPATH environment variable. 
+If you are using the Bash shell, this can be achieved with the command:
+
+   export CLASSPATH=$CLASSPATH:/home/user/jbluez/bin/jbluez.jar
+
+This is necessary to allow the Java compiler and virtual machine to find the 
+classes contained in the com.appliancestudio.jbluez package.
+
+Secondly, you need to tell the run-time shared library loader (ld.so) where to 
+find the 'libjbluez.so' file, which is also located in the bin directory of this 
+distribution. This library contains the compiled native (C) code which sits 
+between the BlueZ stack libraries (written in C) and Java. This can be achieved 
+by added in its location to the LD_LIBRARY_PATH environment variable. For 
+example, if you have unpacked this distribution into the /home/user/jbluez 
+directory, then you need to add /home/user/jbluez/bin/ to your LD_LIBRARY_PATH 
+environment variable. If you are using the Bash shell, this can be achieved with 
+the command:
+
+   export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/user/jbluez/bin/
+
+Before you can communicate fully with your Bluetooth device(s), they need to be 
+initialised or 'brought up'. The simplest way to achieve this is using the 
+hciconfig tool included as part of the BlueZ utilities. To bring up the device 
+hci0, use the command:
+
+   hciconfig hci0 up
+
+Refer to the BlueZ documentation for full details of this tool. Note that you 
+need to have root permissions to perform this function.
+
+Once your environment is set up correctly and your Bluetooth device(s) are up, 
+you can run the example programs included with this distribution to test the you 
+have completed the installation successfully. These also provide an excellent 
+starting point from which to begin development of your own Bluetooth enabled 
+Java applications. Full details can be found in README file, located in the 
+examples directory of this distribution.
+
+Using the API
+-------------
+The example applications demonstrate how to use many of the common methods and 
+data structures defined by JBlueZ. Full details of all the classes and methods 
+provided by the JBlueZ API are documented in the Javadoc documentation. This is 
+located in the javadoc directory of this distribution.
+
+Compiling JBlueZ
+----------------
+JBlueZ is provided in binary form and so can be used without compilation. If, 
+however, you wish to add additional functionality or modify JBlueZ in some way, 
+the source code is included. This can be found in the src directory of this 
+distribution.
+
+JBlueZ is comprised of two components - the Java code in the 
+com.appliancestudio.jbluez package and the C code in the libjbluez.so library. 
+The simplest way to compile the code is to use the Makefiles provided. Makefiles 
+for the Java and C code are provided in the src/java and src/c directories 
+respectively. A Makefile is provided in the src directory to enable complete 
+compilation of both the C and Java components from a single make command.
+
+The Makefiles are well commented so it is best to refer to them directly for 
+different targets and options they provide. Note that the compilation of the C 
+code (bluez.c) requires a machine generated JNI header file. This is generated 
+from the Java classes and so for this reason the Java code must be compiled 
+before the C code.
+
+Troubleshooting
+---------------
+There are a few common problems which may arise. These can appear quite major 
+but have very simple solutions. This section details these problems, why they 
+occur and how to solve them.
+
+Problem: java.lang.UnsatisfiedLinkError: no jbluez in java.library.path
+Cause: The Java VM cannot find the library libjbluez.so.
+Solution: Ensure the LD_LIBRARY_PATH environment variable is set to include the 
+directory which contains libjbluez.so. See Getting Started for details.
+
+Problem: java.lang.NoClassDefFoundError: 
+com/appliancestudio/jbluez/BlueZException (or other JBlueZ package class)
+Cause: The com.appliancestudio.jbluez package is not in your classpath.
+Solution: Add the file jbluez.jar to your CLASSPATH environment variable. See 
+Getting Started for details.
+
+Problem: java.lang.NoClassDefFoundError: LocalDevInfo (or other local class)
+Cause: The current working directory also needs to be present in your classpath.
+Solution: Add the current working directory (.) to your CLASSPATH environment 
+variable. For example, if using the Bash shell, use the command:
+   export CLASSPATH=$CLASSPATH:.
+
+Problem: Java_com_appliancestudio_jbluez_BlueZ_hciCreateConnection: Unable to 
+create connection (or other similar errors)
+Cause: The HCI command being called may require root permissions.
+Solution: Switch to root user. Remember to ensure that the CLASSPATH and 
+LD_LIBRARY_PATH environment variables and set for the root user (see Getting 
+Started). You may also have to give the full path to the Java interpreter if 
+this is not in root's PATH environment variable. If this does not solve the 
+problem, check your Bluetooth hardware and the BlueZ configuration.
+
+Resources and Further Information
+---------------------------------
+For further information relating to Bluetooth, BlueZ and Java, refer to the 
+following sources:
+
+Bluetooth SIG homepage: http://www.bluetooth.com
+BlueZ homepage: http://bluez.sourceforge.net
+JABWT homepage: http://www.jabwt.com
+JABWT message board: http://groups.yahoo.com/group/JABWT
+Linux/Bluetooth information: http://delbert.matlock.com/linux-bluetooth.htm
+
+--
+Copyright (c) 2002 The Appliance Studio Limited
+Written by Edward Kay, ed.kay@appliancestudio.com
+http://www.appliancestudio.com
+

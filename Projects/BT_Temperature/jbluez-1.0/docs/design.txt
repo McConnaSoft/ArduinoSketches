@@ -1,0 +1,109 @@
+JBlueZ - Bluetooth Java Interface for Linux Using BlueZ
+=======================================================
+
+Design Document
+---------------
+
+Introduction
+------------
+JBlueZ is a Java package which interfaces with the BlueZ Bluetooth protocol 
+stack for Linux, providing a simple means in which to add Bluetooth 
+functionality to Java applications.
+
+This document details the design behind its implementation. It states the design 
+decisions made and the reasons behind them. It also highlights possible areas 
+for improvement and routes for further development.
+
+For information relating to how to use JBlueZ, please refer to the User Manual, 
+Javadoc documentation and example applications, all of which are included in 
+this distribution.
+
+Motivation
+----------
+The motivation behind the development of JBlueZ was to provide a simple yet 
+complete Java API for Bluetooth under the Linux operating system. Other possible 
+solutions were carefully evaluated but were rejected for a number of reasons, 
+including:
+
+* Closed source - initial cost of purchase and lack of ability to customise or 
+add functionality.
+* J2ME focused - we wish to utilise J2SE and exploit the full potential of 
+Bluetooth technology.
+* Reliance on proprietary third-party protocol stacks - our target platform is 
+Linux and so we wish to use the official (and most supported) Bluetooth protocol 
+stack, BlueZ.
+
+Since there was no publicly available solution which fulfilled our requirements, 
+the decision was taken to start development of one which did.
+
+Design Decisions
+----------------
+The goal of this project is to provide Bluetooth capabilities for Java 
+development using the Linux platform.
+
+The standard Java APIs for Bluetooth, also known as JSR-82, was investigated but 
+deemed unfit for purpose. JSR-82 defines Java support under J2ME (Java 2 Mobile 
+Edition) and is reliant on the Generic Connection Framework, which is not 
+supported in J2SE (Java 2 Standard Edition) or J2EE (Java 2 Enterprise Edition). 
+It also only defines the Java side of the API. In order to interface with actual 
+Bluetooth hardware, there still needs to be an interface between Java and the 
+protocol stack. This interface is referred to in JSR-82 as a 'Bluetooth Control 
+Centre' or BCC. The implementation of a BCC is dependant upon the hardware being 
+used and as such is not provided by JSR-82. No BCC exists for use with the BlueZ 
+stack for Linux.
+
+In addition to device configuration and tools for many applications (such as 
+establishing RFCOMM connections), the BlueZ stack also provides extensive 
+libraries and data structures for Bluetooth software development, but written in 
+C. The logical way to proceed was to expose these libraries and data structures 
+to Java. This has been achieved through the use of the Java Native Interface 
+(JNI).
+
+Current State
+-------------
+At the time of this release and writing this document, JBlueZ consists mainly of 
+Java access to the BlueZ HCI functions. These are used for reading parameters 
+and settings off the local Bluetooth device(s), performing Bluetooth inquiries 
+to discover remote devices and obtaining information about these remote devices.
+
+Much effort has also been put into making this a scalable solution, so as to 
+simplify further development. The design allows additional BlueZ library 
+functions to be exposed to Java quickly and easily, by simply adding them to 
+interface defined. Many of the data structures used by the BlueZ libraries, for 
+example, that used to store and manipulate Bluetooth device addresses, have also 
+been successfully implemented as Java objects.
+
+Future Development Paths
+------------------------
+Whilst this release is 'complete' in as much as it fulfills what it is trying to 
+achieve, it is not a final solution. There is still much room for further 
+development, mainly in expanding the range of BlueZ functionality exposed to 
+Java developers. Further development along these lines would be likely to 
+include support for the higher layers of the Bluetooth protocol stack; L2CAP, 
+SDP, RFCOMM, audio etc.
+
+Other areas for further development include:
+
+* Multi-threading and synchronisation of access to HCI devices.
+* Implementing tables for mapping the numeric codes used, for example, in 
+features descriptions and version information, to user-friendly strings.
+* Creating a JSR-82-like 'front-end' to the JBlueZ API, allowing applications 
+written using the JSR-82 API to take advantage of the BlueZ stack.
+
+Resources and Further Information
+---------------------------------
+For further information relating to Bluetooth, BlueZ, Java and factors 
+influencing the design of JBlueZ, refer to the following sources:
+
+Bluetooth SIG homepage: http://www.bluetooth.com
+BlueZ homepage: http://bluez.sourceforge.net
+JABWT homepage: http://www.jabwt.com
+JABWT message board: http://groups.yahoo.com/group/JABWT
+Java APIs for Bluetooth (JSR-82): http://www.jcp.org/jsr/detail/82.jsp
+Linux/Bluetooth information: http://delbert.matlock.com/linux-bluetooth.htm
+
+--
+Copyright (c) 2002 The Appliance Studio Limited
+Written by Edward Kay, ed.kay@appliancestudio.com
+http://www.appliancestudio.com
+

@@ -1,0 +1,29 @@
+JBlueZ - Bluetooth Java Interface for Linux Using BlueZ
+=======================================================
+
+Examples Readme
+---------------
+
+This folder contains three small Java applications to demonstrate the use of the 
+jbluez API. Details of what each program does and how this is achieved can be 
+found at the top of the source code.
+
+The programs are executed like any other Java program, e.g.:
+    java Inquiry
+
+Similarly, if you wish to modify them, compilation is also done in the usual 
+manner, e.g.:
+    javac Inquiry.java
+
+Note that before compiling/running these applications, ensure the following:
+* The file 'jbluez.jar' is included in your classpath;
+* The location of 'libjbluez.so' is present in the LD_LIBRARY_PATH environment
+  variable.
+* The local Bluetooth device, as represented by the hciDevID field is correctly 
+  configured and is "up".
+
+--
+Copyright (c) 2002 The Appliance Studio Limited
+Written by Edward Kay, ed.kay@appliancestudio.com
+http://www.appliancestudio.com
+
